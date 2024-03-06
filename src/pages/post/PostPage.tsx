@@ -8,6 +8,7 @@ import { ScorePill } from "@/components/ScorePill";
 import { CommentPill } from "@/components/CommentPill";
 import { Markdown } from "@/components/Markdown";
 import { AuthorInfo } from "@/components/AuthorInfo";
+import { TypePrefixes } from "@/api/reddit/constants";
 
 type PostPageCommentsProps = {
   subreddit: string;
@@ -21,9 +22,14 @@ function PostPageComments({ postId, subreddit }: PostPageCommentsProps) {
     },
   });
 
+  // For now filter out only comment children, there can be "more" children
+  const comments = data.children.filter(
+    (comment) => comment.kind === TypePrefixes.Comment
+  );
+
   return (
     <ul className="flex flex-col gap-y-6">
-      {data.children.map((comment, index) => (
+      {comments.map((comment, index) => (
         <li key={index}>
           <CommentItem
             score={comment.data.score}
@@ -73,12 +79,16 @@ export function PostPage() {
     <div className="container max-w-2xl py-8 flex flex-col gap-y-4">
       <AuthorInfo author={post.author} createdMs={post.created * 1000} />
       <PageHeading className="text-left">{post.title}</PageHeading>
+
       {thumbnailUrl && <img src={thumbnailUrl} className="rounded-md" />}
+
       {post.selftext && <Markdown>{post.selftext}</Markdown>}
-      <div className="flex flex-row flex-nowrap gap-x-4 pb-4 border-b-2">
+
+      <div className="flex flex-row flex-nowrap gap-x-4 pb-8 mb-4 border-b-2">
         <ScorePill score={post.score} />
         <CommentPill comments={post.num_comments} />
       </div>
+
       <Suspense fallback={<PostPageCommentsSkeleton />}>
         <PostPageComments postId={postId} subreddit={subreddit} />
       </Suspense>

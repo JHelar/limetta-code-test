@@ -19,10 +19,12 @@ export function useFetchPosts({
   before,
   limit,
 }: Omit<FetchPostsArgs, "count">) {
-  const totalCountRef = useRef(after || before ? DEFAULT_POST_LIMIT : 0);
+  const totalCountRef = useRef(
+    after || before ? limit ?? DEFAULT_POST_LIMIT : 0
+  );
 
   const { isError, isLoading, data } = useQuery({
-    queryKey: ["posts", subreddit, after, before],
+    queryKey: ["posts", subreddit, after, before, limit],
     async queryFn({ signal }) {
       const data = await fetchPosts(
         {

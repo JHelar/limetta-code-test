@@ -2,15 +2,14 @@ import { z } from "zod";
 import { fetchJSON } from "../../../client";
 import { REDDIT_BASE_URL, TypePrefixes } from "../constants";
 import { makeRedditListingOf } from "../helper";
-import { Comment, Post } from "../types";
-
-const PostList = makeRedditListingOf(Post);
-type PostList = z.infer<typeof PostList>;
+import { Comment } from "../types";
 
 const CommentList = makeRedditListingOf(Comment);
 type CommentList = z.infer<typeof CommentList>;
 
-const FetchPostResponse = z.array(z.union([PostList, CommentList]));
+const FetchPostResponse = z.array(
+  z.union([makeRedditListingOf(z.any()), CommentList])
+);
 
 type FetchPostCommentsArgs = {
   postId: string;
@@ -27,8 +26,9 @@ export async function fetchPostComments(
   const jsonData = await fetchJSON(url, { signal });
   const data = await FetchPostResponse.parseAsync(jsonData);
 
-  const commentsList = data.find((list): list is CommentList =>
-    list.data.children.every(({ kind }) => kind === TypePrefixes.Comment)
+  const commentsList = data.find(
+    (list): list is CommentList =>
+      list.data.children.at(0)?.kind !== TypePrefixes.Link
   );
 
   const comments = commentsList?.data;

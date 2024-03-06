@@ -1,11 +1,12 @@
 import { useCallback } from "react";
 import { useFetchPosts } from "./hooks";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { RedditFullname } from "@/api/reddit";
+import { DEFAULT_POST_LIMIT, RedditFullname } from "@/api/reddit";
 import { z } from "zod";
-import { PageHeading } from "@/components/PageHeading";
 import { Button } from "@/components/ui";
 import { PostListItem } from "@/components/PostListItem";
+import { SubredditSelector } from "./components/SubredditSelector";
+import { PostLimitSelector } from "./components/PostLimitSelector";
 
 const DEFAULT_SUBREDDIT = "javascript";
 
@@ -13,10 +14,11 @@ export const ListPageSeachParams = z.object({
   subreddit: z.string().catch(DEFAULT_SUBREDDIT),
   after: RedditFullname.nullish().catch(null),
   before: RedditFullname.nullish().catch(null),
+  limit: z.number().catch(DEFAULT_POST_LIMIT),
 });
 
 export function ListPage() {
-  const { subreddit, after, before } = useSearch({
+  const { subreddit, after, before, limit } = useSearch({
     from: "/",
   });
 
@@ -26,24 +28,45 @@ export function ListPage() {
 
   const { data } = useFetchPosts({
     subreddit,
+    limit,
     after: after ?? undefined,
     before: before ?? undefined,
   });
 
   const nextPosts = useCallback(() => {
-    return navigate({ search: { subreddit, after: data?.after } });
-  }, [data, navigate, subreddit]);
+    navigate({ search: { subreddit, after: data?.after, limit } });
+  }, [data?.after, limit, navigate, subreddit]);
 
   const previousPosts = useCallback(() => {
-    return navigate({ search: { subreddit, before: data?.before } });
-  }, [data, navigate, subreddit]);
+    navigate({ search: { subreddit, before: data?.before, limit } });
+  }, [data?.before, limit, navigate, subreddit]);
+
+  const selectSubreddit = useCallback(
+    (subreddit: string) => {
+      navigate({ search: { subreddit, limit } });
+    },
+    [limit, navigate]
+  );
+
+  const setPostLimit = useCallback(
+    (limit: number) => {
+      navigate({ search: { subreddit, limit, after, before } });
+    },
+    [after, before, navigate, subreddit]
+  );
 
   const nextDisabled = !data?.after;
   const previousDisabled = !data?.before;
 
   return (
     <div className="container max-w-2xl py-8">
-      <PageHeading className="mb-8">r/{subreddit}</PageHeading>
+      <SubredditSelector subreddit={subreddit} onSelect={selectSubreddit} />
+      <PostLimitSelector
+        className="mt-4 mb-2"
+        limits={[5, 10, 15]}
+        limit={limit}
+        onValueChange={setPostLimit}
+      />
       <ul className="flex flex-col gap-y-4">
         {data?.posts.map(({ data }, index) => {
           return (

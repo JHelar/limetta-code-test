@@ -9,7 +9,7 @@ export function makeRedditListingOf<TData extends ZodTypeAny>(data: TData) {
       before: RedditFullname.nullable(),
       children: z.array(
         z.object({
-          kind: RedditKind,
+          kind: RedditKind.or(z.literal("more")),
           data,
         })
       ),

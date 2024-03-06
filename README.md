@@ -1,30 +1,54 @@
-# React + TypeScript + Vite
+# Limetta code test
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Reddit post list clone, for the Limetta code test
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Node
 
-## Expanding the ESLint configuration
+The project uses node version `v18.19.1`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Dependencies
 
-- Configure the top-level `parserOptions` property like this:
+Install dependencies with yarn version `4.1.0`
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+Install dependencies with command
+
+```
+yarn
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Run dev server
+
+```
+yarn dev
+```
+
+The dev server is hosted on http://localhost:3000
+
+## Run test
+
+Run the unit test with `vitest`
+
+```
+yarn test:unit
+```
+
+Run the e2e test with `playwright`
+
+```
+yarn test:e2e
+```
+
+Or all test at the same time
+
+```
+yarn test
+```
+
+## Page features
+
+- Change the post limit by changing the value in the limit selector on the home page.
+- Change the category (`subreddit`) by clicking the pen icon on the startpage, enter a new category value and click "Go".
+- Navigate the the next or previous page by clicking the corresponding pagination buttons on the bottom of the home page.
+- Click a post to view in its entirety and to view the comments.

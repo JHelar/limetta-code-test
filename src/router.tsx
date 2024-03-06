@@ -1,12 +1,20 @@
 import {
+  Outlet,
   createRootRoute,
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
 import { ListPage, ListPageSeachParams } from "./pages/list";
 import { PostPage } from "./pages/post";
+import { Layout } from "./components/Layout";
 
-const rootRoute = createRootRoute();
+const rootRoute = createRootRoute({
+  component: () => (
+    <Layout>
+      <Outlet />
+    </Layout>
+  ),
+});
 
 export const listRoute = createRoute({
   validateSearch: ListPageSeachParams,

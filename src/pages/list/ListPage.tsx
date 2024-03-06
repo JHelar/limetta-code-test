@@ -1,14 +1,16 @@
 import { useCallback } from "react";
 import { useFetchPosts } from "./hooks";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { DEFAULT_POST_LIMIT, RedditFullname } from "@/api/reddit";
+import {
+  DEFAULT_POST_LIMIT,
+  DEFAULT_SUBREDDIT,
+  RedditFullname,
+} from "@/api/reddit";
 import { z } from "zod";
 import { Button } from "@/components/ui";
 import { PostListItem } from "@/components/PostListItem";
 import { SubredditSelector } from "./components/SubredditSelector";
 import { PostLimitSelector } from "./components/PostLimitSelector";
-
-const DEFAULT_SUBREDDIT = "javascript";
 
 export const ListPageSeachParams = z.object({
   subreddit: z.string().catch(DEFAULT_SUBREDDIT),
@@ -59,7 +61,7 @@ export function ListPage() {
   const previousDisabled = !data?.before;
 
   return (
-    <div className="container max-w-2xl py-8">
+    <div className="container">
       <SubredditSelector subreddit={subreddit} onSelect={selectSubreddit} />
       <PostLimitSelector
         className="mt-4 mb-2"

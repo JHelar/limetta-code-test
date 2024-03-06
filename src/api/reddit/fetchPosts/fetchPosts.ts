@@ -4,6 +4,7 @@ import { fetchJSON } from "../../../client";
 import { makeRedditListingOf } from "../helper";
 
 export const DEFAULT_POST_LIMIT = 10;
+export const DEFAULT_SUBREDDIT = "javascript";
 
 const FetchPostsResponse = makeRedditListingOf(Post);
 

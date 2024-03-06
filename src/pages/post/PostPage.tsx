@@ -76,7 +76,7 @@ export function PostPage() {
   const thumbnailUrl = post.preview?.images.at(0)?.source.url;
 
   return (
-    <div className="container max-w-2xl py-8 flex flex-col gap-y-4">
+    <div className="container flex flex-col gap-y-4">
       <AuthorInfo author={post.author} createdMs={post.created * 1000} />
       <PageHeading className="text-left">{post.title}</PageHeading>
 

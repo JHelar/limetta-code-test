@@ -69,28 +69,31 @@ export function ListPage() {
         limit={limit}
         onValueChange={setPostLimit}
       />
-      <ul className="flex flex-col gap-y-4">
-        {data?.posts.map(({ data }, index) => {
-          return (
-            <li key={index}>
-              <Link
-                to="/post/$subreddit/$postId"
-                params={{ subreddit, postId: data.id }}
-                className="group"
-              >
-                <PostListItem
-                  thumbnailUrl={data.preview?.images.at(0)?.source.url}
-                  author={data.author}
-                  createdMs={data.created * 1000}
-                  score={data.score}
-                  title={data.title}
-                  comments={data.num_comments}
-                />
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      {data && (
+        <ul className="flex flex-col gap-y-4" data-testid="post-list">
+          {data.posts.map(({ data }, index) => {
+            return (
+              <li key={index}>
+                <Link
+                  to="/post/$subreddit/$postId"
+                  params={{ subreddit, postId: data.id }}
+                  className="group"
+                  data-testid="post-list-item"
+                >
+                  <PostListItem
+                    thumbnailUrl={data.preview?.images.at(0)?.source.url}
+                    author={data.author}
+                    createdMs={data.created * 1000}
+                    score={data.score}
+                    title={data.title}
+                    comments={data.num_comments}
+                  />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
       <div className="flex flex-row gap-x-2 mt-8 justify-center">
         <Button onClick={previousPosts} disabled={previousDisabled}>
           Previous

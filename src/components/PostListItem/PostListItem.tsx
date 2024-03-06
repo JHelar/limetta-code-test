@@ -23,7 +23,9 @@ export function PostListItem({
     <div className="p-4 rounded-md flex flex-col gap-y-4 bg-secondary group-hover:bg-secondary/30 group-focus-visible:bg-secondary/30 transition-colors">
       <AuthorInfo author={author} createdMs={createdMs} />
       <div>
-        <h2 className="text-lg font-bold">{title}</h2>
+        <h2 className="text-lg font-bold" data-testid="post-list-item-title">
+          {title}
+        </h2>
         {thumbnailUrl && (
           <img
             className="block mt-2 max-h-96 w-full object-contain object-center rounded-md bg-secondary-foreground"
